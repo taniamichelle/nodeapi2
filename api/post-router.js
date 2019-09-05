@@ -6,7 +6,7 @@ postRouter.use(express.json());
 
 // get all posts
 postRouter.get('/', (req, res) => {
-    db.find()
+    postDb.find()
         .then(post => {
             res.status(201).json(post);
         })
@@ -22,7 +22,7 @@ postRouter.post('/', (req, res) => {
     if (!title || !contents) {
         res.status(400).json({ error: "Please provide title and contents for the post." });
     }
-    db.insert({ title, contents })
+    postDb.insert({ title, contents })
         .then(newComment => {
             res.status(201).json(newComment);
         })
@@ -35,7 +35,7 @@ postRouter.post('/', (req, res) => {
 // get individual post by id
 postRouter.get('/:id', (req, res) => {
     const postId = req.params.id;
-    db.findPostComments(postId)
+    postDb.findPostComments(postId)
         .then(post => {
             console.log('post', post);
             if (post) {
@@ -53,7 +53,7 @@ postRouter.get('/:id', (req, res) => {
 // get comment specfied by post id
 postRouter.get('/:id/comments', (req, res) => {
     const { id } = req.params;
-    db.findCommentById(id)
+    postDb.findCommentById(id)
         .then(comment => {
             // console.log('comment', comment);
             if (comment) {
@@ -76,7 +76,7 @@ postRouter.post('/:id/comments', (req, res) => {
     if (!post_id) {
         res.status(404).json({ error: "The post with the specified ID does not exist." });
     }
-    db.insertComment({ text, post_id })
+    postDb.insertComment({ text, post_id })
         .then(newComment => {
             if (!text) {
                 return res.status(400).json({ error: "Please provide text for the comment." });
@@ -92,7 +92,7 @@ postRouter.post('/:id/comments', (req, res) => {
 // delete post specified by id
 postRouter.delete('/:id', (req, res) => {
     const { id } = req.params;
-    db.remove(id)
+    postDb.remove(id)
         .then(deleted => {
             if (deleted) {
                 res.status(204).end();
@@ -113,7 +113,7 @@ postRouter.put('/:id', (req, res) => {
     if (!title && !contents) {
         res.status(400).json({ error: "Please provide title and contents for the post." });
     }
-    db.update(id, { title, contents })
+    postDb.update(id, { title, contents })
         .then(updated => {
             if (updated) {
                 db.findById(id)
