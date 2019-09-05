@@ -8,8 +8,8 @@ const server = express();
 const postRouter = require('./data/routing/post-router');
 
 server.use(express.json());
-server.use('/api/posts', postRouter);
 server.use(helmet());
+server.use('/api/posts', postRouter);
 
 server.get('/', (req, res) => {
     res.send(`<h1>Test</h1>`);
