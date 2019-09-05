@@ -3,11 +3,10 @@ const helmet = require('helmet');
 
 console.log('environment', process.env.NODE_ENV);
 
+const postRouter = require('../api/post-router');
+
 const server = express();
 
-const postRouter = require('./data/routing/post-router');
-
-server.use(express.json());
 server.use(helmet());
 server.use('/api/posts', postRouter);
 
